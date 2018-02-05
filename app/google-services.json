@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "970531532317",
+    "firebase_url": "https://chnumarks-fa08d.firebaseio.com",
+    "project_id": "chnumarks-fa08d",
+    "storage_bucket": "chnumarks-fa08d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970531532317:android:b5791edd3383db4f",
+        "android_client_info": {
+          "package_name": "com.chnumarks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "970531532317-9q9e31flsl38jp06sigdccooepo7gbio.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chnumarks",
+            "certificate_hash": "dfc3b6417925652c8b90badd34e77f9e27a8524c"
+          }
+        },
+        {
+          "client_id": "970531532317-g7edmvcm368bouhu23blqirlbbbuf3fc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQd2NokrNdrEurXhaOOTUGaiXEl_9GW7s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "970531532317-g7edmvcm368bouhu23blqirlbbbuf3fc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
