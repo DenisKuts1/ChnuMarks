@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     val textView by lazy { findViewById<TextView>(R.id.textView) }
     val toolbar by lazy { findViewById<Toolbar>(R.id.main_toolbar) }
     val auth by lazy { FirebaseAuth.getInstance() }
+    val database by lazy { FirebaseDatabase.getInstance()}
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //menuInflater.inflate(R.menu.toolbar_menu, menu)
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             updateUI(user)
         }
+
     }
 
     fun updateUI(user: FirebaseUser?) {
