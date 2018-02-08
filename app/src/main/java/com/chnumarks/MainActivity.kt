@@ -8,25 +8,20 @@ import android.view.Menu
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : AppCompatActivity() {
 
-    val textView by lazy {
-        findViewById<TextView>(R.id.textView)
-    }
-    val toolbar by lazy {
-        findViewById<Toolbar>(R.id.main_toolbar)
-    }
+    val textView by lazy { findViewById<TextView>(R.id.textView) }
+    val toolbar by lazy { findViewById<Toolbar>(R.id.main_toolbar) }
+    val profileImage by lazy { findViewById<CircleImageView>(R.id.navigation_header_profile_image) }
+    val profileName by lazy { findViewById<TextView>(R.id.navigation_header_profile_name) }
+    val profileEmail by lazy { findViewById<TextView>(R.id.navigation_header_profile_email) }
 
     /*val mAuth by lazy {
         FirebaseAuth.getInstance()
@@ -56,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             textView.text = user.email
         }*/
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -64,7 +60,9 @@ class MainActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
-
+                profileName.text = account.displayName
+                profileEmail.text = account.email
+                Picasso.with(this).load(account.photoUrl).into(profileImage)
 
                 /*val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                 s += account.displayName + " " + account.email
