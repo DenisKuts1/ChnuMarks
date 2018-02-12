@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="@string/navigation_menu_schedule"
-        android:icon="@mipmap/ic_toc_black_24dp" />
-    <item android:title="@string/navigation_menu_edit"
-        android:icon="@mipmap/ic_edit" />
-    <item android:title="@string/navigation_menu_report"
-        android:icon="@mipmap/ic_toc_black_24dp"/>
-    <item android:title="@string/navigation_menu_settings"
-        android:icon="@mipmap/ic_settings"/>
-    <item android:title="@string/navigation_menu_exit"
-        android:icon="@mipmap/ic_exit"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:icon="@mipmap/ic_toc_black_24dp"
+            android:title="@string/navigation_menu_schedule" />
+        <item
+            android:icon="@mipmap/ic_edit"
+            android:title="@string/navigation_menu_edit" />
+        <item
+            android:icon="@mipmap/ic_toc_black_24dp"
+            android:title="@string/navigation_menu_report" />
+        <item
+            android:icon="@mipmap/ic_settings"
+            android:title="@string/navigation_menu_settings" />
+        <item
+            android:icon="@mipmap/ic_exit"
+            android:title="@string/navigation_menu_exit" />
+    </group>
 </menu>
