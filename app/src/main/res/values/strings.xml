@@ -9,4 +9,7 @@
     <string name="navigation_menu_exit">Exit</string>
     <string name="navigation_header_default_email">default.email@gmail.com</string>
     <string name="navigation_header_default_name">Default Name</string>
+
+    <string name="tab_schedule">Schedule</string>
+    <string name="tab_subjects">Subjects</string>
 </resources>

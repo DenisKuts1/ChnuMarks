@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
             toolbar.setPadding(0, offset,0,0)
             navigationView.getHeaderView(0).setPadding(0, offset,0,0)
         }
+
     }
 
     override fun onStart() {
