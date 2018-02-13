@@ -12,4 +12,13 @@
 
     <string name="tab_schedule">Schedule</string>
     <string name="tab_subjects">Subjects</string>
+
+
+    <string name="week_1_schedule_fragment">1st week</string>
+    <string name="week_2_schedule_fragment">2st week</string>
+    <string name="monday_schedule_fragment">Monday</string>
+    <string name="tuesday_schedule_fragment">Tuesday</string>
+    <string name="wednesday_schedule_fragment">Wednesday</string>
+    <string name="thursday_schedule_fragment">Thursday</string>
+    <string name="friday_schedule_fragment">Friday</string>
 </resources>
