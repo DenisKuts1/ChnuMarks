@@ -6,12 +6,14 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.TabLayout
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.TextView
+import com.chnumarks.fragments.EditFragment
 import com.chnumarks.fragments.ScheduleFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
     val drawer_layout by lazy { findViewById<DrawerLayout>(R.id.main_drawer_layout) }
     val database by lazy { FirebaseDatabase.getInstance() }
     val navigationView by lazy { findViewById<NavigationView>(R.id.navigation_view) }
+    val tabLayout by lazy { toolbar.findViewById<TabLayout>(R.id.edit_tab_layout)}
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         //menuInflater.inflate(R.menu.toolbar_menu, menu)
@@ -50,8 +53,10 @@ class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
             toolbar.setPadding(0, offset,0,0)
             navigationView.getHeaderView(0).setPadding(0, offset,0,0)
         }
-        val fragment = ScheduleFragment()
-        fragmentManager.beginTransaction().add(R.id.main_content, fragment).commit()
+        val fragment = EditFragment()
+        fragment.setUpTabLayout(tabLayout)
+        supportFragmentManager.beginTransaction().add(R.id.main_content, fragment).commit()
+
 
     }
 
