@@ -1,5 +1,6 @@
 package com.chnumarks
 
+import android.app.Fragment
 import android.content.Intent
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -9,11 +10,9 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import com.chnumarks.fragments.ScheduleFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -26,7 +25,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
 
-    val textView by lazy { findViewById<TextView>(R.id.textView) }
     val toolbar by lazy { findViewById<Toolbar>(R.id.main_toolbar) }
     val auth by lazy { FirebaseAuth.getInstance() }
     val drawer_layout by lazy { findViewById<DrawerLayout>(R.id.main_drawer_layout) }
@@ -52,6 +50,8 @@ class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
             toolbar.setPadding(0, offset,0,0)
             navigationView.getHeaderView(0).setPadding(0, offset,0,0)
         }
+        val fragment = ScheduleFragment()
+        fragmentManager.beginTransaction().add(R.id.main_content, fragment).commit()
 
     }
 
@@ -79,8 +79,6 @@ class MainActivity : AppCompatActivity(), DrawerLayout.DrawerListener {
             profileName.text = user.displayName
             profileEmail.text = user.email
             Picasso.with(this).load(user.photoUrl).into(profileImage)
-        } else {
-            textView.text = "Ops..."
         }
     }
 
