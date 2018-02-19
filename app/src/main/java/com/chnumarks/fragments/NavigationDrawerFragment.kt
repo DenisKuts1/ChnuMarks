@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.chnumarks.MainActivity
 import com.chnumarks.R
 import com.chnumarks.clearLightStatusBar
 import com.chnumarks.setLightStatusBar
@@ -20,7 +22,16 @@ import de.hdodenhof.circleimageview.CircleImageView
 /**
  * Created by denak on 15.02.2018.
  */
-class NavigationDrawerFragment : Fragment(), DrawerLayout.DrawerListener {
+class NavigationDrawerFragment : Fragment(), DrawerLayout.DrawerListener, NavigationView.OnNavigationItemSelectedListener  {
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.title){
+            resources.getString(R.string.navigation_menu_edit) -> {
+                (activity as MainActivity).changeFragment(EditFragment())
+            }
+        }
+        return true
+    }
 
     private lateinit var toolbar: Toolbar
     private lateinit var drawerLayout: DrawerLayout
@@ -34,6 +45,7 @@ class NavigationDrawerFragment : Fragment(), DrawerLayout.DrawerListener {
             val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()
             navigationView.getHeaderView(0).setPadding(0, offset,0,0)
         }
+        navigationView.setNavigationItemSelectedListener(this)
         return view
     }
 

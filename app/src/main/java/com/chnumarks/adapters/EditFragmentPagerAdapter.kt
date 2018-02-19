@@ -1,11 +1,10 @@
 package com.chnumarks.adapters
 
 import android.content.Context
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import com.chnumarks.R
-import com.chnumarks.fragments.ScheduleFragment
+import com.chnumarks.fragments.EditScheduleFragment
 import com.chnumarks.fragments.SubjectFragment
 
 /**
@@ -19,7 +18,7 @@ class EditFragmentPagerAdapter : FragmentPagerAdapter {
     }
 
     override fun getItem(position: Int) = when (position) {
-        0 -> ScheduleFragment()
+        0 -> EditScheduleFragment()
         else -> SubjectFragment()
 
     }

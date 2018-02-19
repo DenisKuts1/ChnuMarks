@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TabLayout tabLayout;
     private NavigationDrawerFragment navigationFragment;
+    private Fragment currentFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.main_drawer_layout);
         tabLayout = findViewById(R.id.edit_tab_layout);
         UtilsKt.setLightStatusBar(toolbar, this);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
 
          */
+        currentFragment = editFragment;
     }
 
     @Override
@@ -123,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             updateUI(user);
         }
+    }
+
+    public void changeFragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().remove(currentFragment).add(R.id.main_content,fragment).commit();
     }
 
     private void updateUI(FirebaseUser user) {
