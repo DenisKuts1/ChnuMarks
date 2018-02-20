@@ -14,6 +14,7 @@ import android.widget.TextView
 import com.chnumarks.MainActivity
 import com.chnumarks.R
 import com.chnumarks.clearLightStatusBar
+import com.chnumarks.listeners.NavigationDrawerListener
 import com.chnumarks.setLightStatusBar
 import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
@@ -22,63 +23,39 @@ import de.hdodenhof.circleimageview.CircleImageView
 /**
  * Created by denak on 15.02.2018.
  */
-class NavigationDrawerFragment : Fragment(), DrawerLayout.DrawerListener, NavigationView.OnNavigationItemSelectedListener  {
+class NavigationDrawerFragment : Fragment() {
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.title){
-            resources.getString(R.string.navigation_menu_edit) -> {
-                (activity as MainActivity).changeFragment(EditFragment())
-            }
-        }
-        return true
-    }
-
-    private lateinit var toolbar: Toolbar
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private lateinit var user: FirebaseUser
+    private lateinit var listener: NavigationView.OnNavigationItemSelectedListener
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.navigation_drawer_fragment, container, false)
-        drawerLayout.addDrawerListener(this)
         navigationView = view.findViewById(R.id.navigation_view)
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()
-            navigationView.getHeaderView(0).setPadding(0, offset,0,0)
+            navigationView.getHeaderView(0).setPadding(0, offset, 0, 0)
         }
-        navigationView.setNavigationItemSelectedListener(this)
+        navigationView.setNavigationItemSelectedListener(listener)
+        drawUser()
         return view
     }
 
-    fun setParameters(toolbar: Toolbar, drawerLayout: DrawerLayout) {
-        this.toolbar = toolbar
-        this.drawerLayout = drawerLayout
+    fun setUser(user: FirebaseUser) {
+        this.user = user
     }
 
-    fun setUser(user: FirebaseUser?){
-        if (user != null) {
-            val profileName = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_name)
-            val profileEmail = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_email)
-            val profileImage = navigationView.getHeaderView(0).findViewById<CircleImageView>(R.id.navigation_header_profile_image)
-            profileName.text = user.displayName
-            profileEmail.text = user.email
-            Picasso.with(activity).load(user.photoUrl).into(profileImage)
-        }
+    fun setNavigationListener(listener: NavigationView.OnNavigationItemSelectedListener){
+        this.listener = listener
     }
 
-    override fun onDrawerStateChanged(newState: Int) {}
-
-    override fun onDrawerSlide(drawerView: View?, slideOffset: Float) {}
-
-    override fun onDrawerClosed(drawerView: View?) {
-        if (drawerView != null) {
-            setLightStatusBar(toolbar, activity)
-        }
-    }
-
-    override fun onDrawerOpened(drawerView: View?) {
-        if (drawerView != null) {
-            clearLightStatusBar(toolbar, activity)
-        }
+    fun drawUser() {
+        val profileName = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_name)
+        val profileEmail = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_email)
+        val profileImage = navigationView.getHeaderView(0).findViewById<CircleImageView>(R.id.navigation_header_profile_image)
+        profileName.text = user.displayName
+        profileEmail.text = user.email
+        Picasso.with(activity).load(user.photoUrl).into(profileImage)
     }
 
 }
