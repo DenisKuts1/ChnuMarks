@@ -65,6 +65,51 @@ public class MainActivity extends AppCompatActivity {
         editFragment.setUpTabLayout(tabLayout);
         getSupportFragmentManager().beginTransaction().add(R.id.main_content, editFragment).commit();
         currentFragment = editFragment;
+
+
+        /*
+
+         так я в себе запустив це
+         StudentListFragment fragment = new StudentListFragment();
+
+
+        List<StudentInfo> list = new ArrayList<>();
+        String names[] = {"Куц Денис","Лабінський Віктор","Лисенко Юлія","Мельничук Андрій","Нікітін Олексій","Ніколаєвич Владислав","Нікорич Василь","Анонімус"};
+        int points[] = {    56 ,            21   ,               47,            52      ,          30          ,            15       ,      44          ,   50   };
+        int done[] = {    14 ,              5 ,                  11,            13       ,          7          ,              3       ,      10         ,   13 };
+        long id[];
+        double marks[];
+        int temp;
+
+
+        for (int i = 0; i <names.length ; i++) {
+            id = new long[done[i]];
+            marks = new double[done[i]];
+            temp = points[i] - done[i];
+            for (int j = 0; j <done[i] ; j++) {
+                id[j] = j;
+                if (temp>4){
+                    marks[j] = 5;
+                    temp -= 4;
+                }
+                else {
+                    marks[j] = 1 + temp;
+                    temp = 0;
+                }
+            }
+            list.add(new StudentInfo(names[i],id,marks));
+        }
+
+
+
+
+
+        fragment.list = list;
+        getSupportFragmentManager().beginTransaction().add(R.id.rootLayout, fragment).commit();
+
+
+
+         */
     }
 
     @Override
