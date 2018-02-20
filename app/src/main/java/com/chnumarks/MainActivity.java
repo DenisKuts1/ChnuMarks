@@ -3,7 +3,6 @@ package com.chnumarks;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,18 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.WindowManager;
 
-import com.chnumarks.R;
-import com.chnumarks.UtilsKt;
-import com.chnumarks.fragments.EditFragment;
+import com.chnumarks.fragments.FragmentManager;
+import com.chnumarks.fragments.menu.EditFragment;
 import com.chnumarks.fragments.NavigationDrawerFragment;
+import com.chnumarks.fragments.menu.ScheduleFragment;
+import com.chnumarks.listeners.NavigationDrawerListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -36,20 +34,26 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private FirebaseAuth auth;
-    private DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
     private TabLayout tabLayout;
-    private NavigationDrawerFragment navigationFragment;
     private Fragment currentFragment;
+    private FragmentManager manager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = findViewById(R.id.main_toolbar);
+        drawerLayout = findViewById(R.id.main_drawer_layout);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        auth = FirebaseAuth.getInstance();
+        manager = new FragmentManager(this);
+        /*toolbar = findViewById(R.id.main_toolbar);
         drawerLayout = findViewById(R.id.main_drawer_layout);
         tabLayout = findViewById(R.id.edit_tab_layout);
         UtilsKt.setLightStatusBar(toolbar, this);
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -64,8 +68,7 @@ public class MainActivity extends AppCompatActivity {
         EditFragment editFragment = new EditFragment();
         editFragment.setUpTabLayout(tabLayout);
         getSupportFragmentManager().beginTransaction().add(R.id.main_content, editFragment).commit();
-        currentFragment = editFragment;
-
+        currentFragment = editFragment;*/
 
         /*
 
@@ -112,10 +115,23 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+    public void authenticate() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build();
+        Intent signInIntent = GoogleSignIn.getClient(this, gso).getSignInIntent();
+        startActivityForResult(signInIntent, 1);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        auth = FirebaseAuth.getInstance();
+        if(auth.getCurrentUser() != null) {
+            drawerLayout.addDrawerListener(new NavigationDrawerListener(manager.getToolbar(), this));
+            updateUI(auth.getCurrentUser());
+        }
+        /*auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -126,16 +142,24 @@ public class MainActivity extends AppCompatActivity {
             startActivityForResult(signInIntent, 1);
         } else {
             updateUI(user);
-        }
+        }*/
     }
 
-    public void changeFragment(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().remove(currentFragment).add(R.id.main_content,fragment).commit();
+
+    public void changeFragment(CharSequence title) {
+        Fragment fragment = null;
+        if (title.equals(getResources().getString(R.string.navigation_menu_edit))) {
+            fragment = new EditFragment();
+            ((EditFragment) fragment).setUpTabLayout(tabLayout);
+        } else if (title.equals(getResources().getString(R.string.navigation_menu_schedule))) {
+            fragment = new ScheduleFragment();
+        }
+        getSupportFragmentManager().beginTransaction().remove(currentFragment).add(R.id.main_content, fragment).commit();
         currentFragment = fragment;
     }
 
     private void updateUI(FirebaseUser user) {
-        navigationFragment.setUser(user);
+        manager.setUpUserInfo(user);
     }
 
     @Override
@@ -148,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
                 auth.signInWithCredential(credential).addOnCompleteListener(task1 -> {
                     FirebaseUser newUser = auth.getCurrentUser();
+                    manager.initialSetUp(newUser);
                     updateUI(newUser);
                 });
             } catch (Throwable e) {

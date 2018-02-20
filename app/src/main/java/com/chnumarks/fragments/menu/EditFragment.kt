@@ -1,5 +1,6 @@
-package com.chnumarks.fragments
+package com.chnumarks.fragments.menu
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
@@ -13,18 +14,24 @@ import com.chnumarks.adapters.EditFragmentPagerAdapter
 /**
  * Created by denak on 14.02.2018.
  */
-class EditFragment: Fragment(){
+class EditFragment : Fragment() {
 
     lateinit var tabLayout: TabLayout
+    lateinit var viewPager: ViewPager
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.edit_fragment, container, false)
-        val viewPager = view.findViewById<ViewPager>(R.id.edit_view_pager)
-        viewPager.adapter = EditFragmentPagerAdapter(this.activity, activity.supportFragmentManager)
+        viewPager = view.findViewById(R.id.edit_view_pager)
+        viewPager.adapter = EditFragmentPagerAdapter(this.activity, childFragmentManager)
         tabLayout.setupWithViewPager(viewPager)
         return view
     }
 
-    fun setUpTabLayout(tabLayout: TabLayout){
+    fun setUpTabLayout(tabLayout: TabLayout) {
         this.tabLayout = tabLayout
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        viewPager.adapter = null
     }
 }

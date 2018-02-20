@@ -1,31 +1,31 @@
 package com.chnumarks.adapters
 
 import android.content.Context
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.util.SparseArray
+import android.view.View
+import android.view.ViewGroup
 import com.chnumarks.R
-import com.chnumarks.fragments.EditScheduleFragment
-import com.chnumarks.fragments.SubjectFragment
+import com.chnumarks.fragments.menu.edit.EditScheduleFragment
+import com.chnumarks.fragments.menu.edit.EditSubjectFragment
 
 /**
  * Created by denak on 14.02.2018.
  */
-class EditFragmentPagerAdapter : FragmentPagerAdapter {
-    val context: Context
-
-    constructor(context: Context, fragmentManager: FragmentManager) : super(fragmentManager) {
-        this.context = context
-    }
+class EditFragmentPagerAdapter(val context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    val editScheduleFragment = EditScheduleFragment()
+    val editSubjectFragment = EditSubjectFragment()
 
     override fun getItem(position: Int) = when (position) {
-        0 -> EditScheduleFragment()
-        else -> SubjectFragment()
-
+        0 -> editScheduleFragment
+        else -> editSubjectFragment
     }
 
     override fun getCount() = 2
 
-    override fun getPageTitle(position: Int) = when(position) {
+    override fun getPageTitle(position: Int) = when (position) {
         0 -> context.resources.getString(R.string.tab_schedule)
         else -> context.resources.getString(R.string.tab_subjects)
     }
