@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void changeFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().remove(currentFragment).add(R.id.main_content,fragment).commit();
+        currentFragment = fragment;
     }
 
     private void updateUI(FirebaseUser user) {
