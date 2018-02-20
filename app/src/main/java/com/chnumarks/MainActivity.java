@@ -13,7 +13,6 @@ import android.view.WindowManager;
 
 import com.chnumarks.fragments.FragmentManager;
 import com.chnumarks.fragments.menu.EditFragment;
-import com.chnumarks.fragments.NavigationDrawerFragment;
 import com.chnumarks.fragments.menu.ScheduleFragment;
 import com.chnumarks.listeners.NavigationDrawerListener;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -113,17 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
 
          */
-        currentFragment = editFragment;
     }
 
-    public void authenticate() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestEmail()
-                .build();
-        Intent signInIntent = GoogleSignIn.getClient(this, gso).getSignInIntent();
-        startActivityForResult(signInIntent, 1);
-    }
 
     public void authenticate() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
