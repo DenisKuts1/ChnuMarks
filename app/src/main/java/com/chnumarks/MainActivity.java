@@ -125,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, 1);
     }
 
+    public void authenticate() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.web_client_id))
+                .requestEmail()
+                .build();
+        Intent signInIntent = GoogleSignIn.getClient(this, gso).getSignInIntent();
+        startActivityForResult(signInIntent, 1);
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
