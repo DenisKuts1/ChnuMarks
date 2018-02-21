@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CFCFCF"
+    android:orientation="horizontal"
+    android:layoutDirection="ltr"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="64dp"
+    android:paddingEnd="64dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_circle_black_24dp"
+        android:gravity="start"
+        android:paddingEnd="8dp"/>
+
+    <TextView
+        android:id="@+id/edit_schedule_list_item_add_new_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="@string/edit_schedule_list_item_add_new"
+        android:gravity="start"
+        android:textSize="16sp"/>
+
+</LinearLayout>

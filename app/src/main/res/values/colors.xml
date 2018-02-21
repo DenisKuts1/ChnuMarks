@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#BBBBBB</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorRippleAnimation">#BBBBBB</color>
+    <color name="edit_schedule_week">#64B5F6</color>
 </resources>

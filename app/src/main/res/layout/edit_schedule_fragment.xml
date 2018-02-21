@@ -10,23 +10,39 @@
         android:id="@+id/first_week_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/week_1_schedule_fragment"/>
+        android:layout_gravity="center"
+        android:paddingTop="4dp"
+        android:text="@string/week_1_schedule_fragment"
+        android:textColor="@color/edit_schedule_week" />
 
     <ExpandableListView
         android:id="@+id/first_week_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:childDivider="@color/colorPrimary"
+        android:divider="@color/colorPrimary"
+        android:groupIndicator="@color/edit_schedule_expandable_list_indicator"
+        android:layoutDirection="rtl"
+        android:paddingTop="4dp" />
 
     <TextView
         android:id="@+id/second_week_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/week_2_schedule_fragment"/>
+        android:layout_gravity="center"
+        android:paddingTop="4dp"
+        android:text="@string/week_2_schedule_fragment"
+        android:textColor="@color/edit_schedule_week" />
 
     <ExpandableListView
         android:id="@+id/second_week_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:childDivider="@color/colorPrimary"
+        android:divider="@color/colorPrimary"
+        android:groupIndicator="@color/edit_schedule_expandable_list_indicator"
+        android:layoutDirection="rtl"
+        android:paddingTop="4dp"/>
 
 
 </LinearLayout>

@@ -21,4 +21,5 @@
     <string name="wednesday_schedule_fragment">Wednesday</string>
     <string name="thursday_schedule_fragment">Thursday</string>
     <string name="friday_schedule_fragment">Friday</string>
+    <string name="edit_schedule_list_item_add_new">Add new</string>
 </resources>

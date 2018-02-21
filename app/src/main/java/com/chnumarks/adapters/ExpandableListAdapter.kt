@@ -32,7 +32,7 @@ class ExpandableListAdapter : BaseExpandableListAdapter {
         val title = getGroup(p0)
         val view = if (p2 == null) {
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            inflater.inflate(R.layout.list_header, p3, false)
+            inflater.inflate(R.layout.edit_schedule_list_header, p3, false)
         } else {
             p2
         }
@@ -41,26 +41,50 @@ class ExpandableListAdapter : BaseExpandableListAdapter {
         return view
     }
 
-    override fun getChildrenCount(p0: Int) = data[headers[p0]]!!.size
+    override fun getChildrenCount(p0: Int) = data[headers[p0]]!!.size + 1
 
-    override fun getChild(p0: Int, p1: Int) = data[headers[p0]]!![p1]
+    override fun getChild(p0: Int, p1: Int) = if (p1 != data[headers[p0]]!!.size) {
+        data[headers[p0]]!![p1]
+    } else {
+        "Add new"
+    }
 
     override fun getGroupId(p0: Int) = p0.toLong()
 
     override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
         val text = getChild(p0, p1)
-        val view = if (p3 == null) {
-            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            inflater.inflate(R.layout.list_item, p4, false)
+        val view: View
+        if (p1 != data[headers[p0]]!!.size) {
+            view = if (p3 == null) {
+                val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                inflater.inflate(R.layout.edit_schedule_list_item, p4, false)
+            } else {
+                p3
+            }
+            val listChildText = view.findViewById<TextView>(R.id.list_item_text)
+            listChildText.text = text
         } else {
-            p3
+            view = if (p3 == null) {
+                val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                inflater.inflate(R.layout.edit_schedule_add_new_list_item, p4, false)
+            } else {
+                p3
+            }
+            val listChildText = view.findViewById<TextView>(R.id.edit_schedule_list_item_add_new_text)
+            listChildText.text = text
         }
-        val listChildText = view.findViewById<TextView>(R.id.list_item_text)
-        listChildText.text = text
         return view
     }
 
     override fun getChildId(p0: Int, p1: Int) = p1.toLong()
 
     override fun getGroupCount() = headers.size
+
+    override fun getChildType(groupPosition: Int, childPosition: Int) = if (childPosition == data[headers[groupPosition]]!!.size) {
+        1
+    } else {
+        0
+    }
+
+    override fun getChildTypeCount() = 2
 }

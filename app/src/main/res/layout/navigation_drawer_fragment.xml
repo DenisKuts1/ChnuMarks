@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@color/colorPrimary"
+    app:itemTextColor="@color/nav_state_list"
+    app:itemIconTint="@color/nav_state_list"
     app:headerLayout="@layout/navigation_header"
     app:menu="@menu/navigation_menu"
     tools:context="com.chnumarks.fragments.NavigationDrawerFragment">

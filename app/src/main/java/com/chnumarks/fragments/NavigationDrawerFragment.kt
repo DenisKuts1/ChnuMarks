@@ -38,6 +38,7 @@ class NavigationDrawerFragment : Fragment() {
         }
         navigationView.setNavigationItemSelectedListener(listener)
         drawUser()
+        navigationView.menu.getItem(0).isChecked = true
         return view
     }
 
@@ -53,9 +54,11 @@ class NavigationDrawerFragment : Fragment() {
         val profileName = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_name)
         val profileEmail = navigationView.getHeaderView(0).findViewById<TextView>(R.id.navigation_header_profile_email)
         val profileImage = navigationView.getHeaderView(0).findViewById<CircleImageView>(R.id.navigation_header_profile_image)
+
         profileName.text = user.displayName
         profileEmail.text = user.email
         Picasso.with(activity).load(user.photoUrl).into(profileImage)
+
     }
 
 }
