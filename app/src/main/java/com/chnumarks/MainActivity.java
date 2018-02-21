@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(auth.getCurrentUser() != null) {
-            drawerLayout.addDrawerListener(new NavigationDrawerListener(manager.getToolbar(), this));
+            //drawerLayout.addDrawerListener(new NavigationDrawerListener(manager.getToolbar(), this));
             updateUI(auth.getCurrentUser());
         }
         /*auth = FirebaseAuth.getInstance();

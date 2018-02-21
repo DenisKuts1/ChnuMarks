@@ -2,7 +2,6 @@ package com.chnumarks.fragments
 
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
 import com.chnumarks.MainActivity
 import com.chnumarks.R
@@ -11,7 +10,6 @@ import com.chnumarks.fragments.toolbars.EditToolbarFragment
 import com.chnumarks.fragments.toolbars.MainToolbarFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.navigation_drawer_fragment.*
 
 /**
  * Created by denak on 20.02.2018.
@@ -36,6 +34,8 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
 
 
     init {
+        editToolbarFragment.drawerLayout = activity.drawerLayout
+        mainToolbarFragment.drawerLayout = activity.drawerLayout
         if (auth.currentUser == null) {
             attachWelcomeFragment()
         } else {
