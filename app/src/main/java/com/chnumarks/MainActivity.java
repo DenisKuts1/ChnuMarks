@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 /**
  * Created by denak on 15.02.2018.
@@ -49,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
         }
         auth = FirebaseAuth.getInstance();
         manager = new FragmentManager(this);
+
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        FirebaseFirestore.getInstance().setFirestoreSettings(settings);
+
         /*toolbar = findViewById(R.id.main_toolbar);
         drawerLayout = findViewById(R.id.main_drawer_layout);
         tabLayout = findViewById(R.id.edit_tab_layout);

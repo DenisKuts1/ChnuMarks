@@ -21,6 +21,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     val reportFragment = ReportFragment()
     val settingsFragment = SettingsFragment()
     val welcomeFragment = WelcomeFragment()
+    val createSubjectFragment = CreateSubjectFragment()
 
     val navigationFragment = NavigationDrawerFragment()
     val mainToolbarFragment = MainToolbarFragment()
@@ -171,7 +172,17 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     }
 
     fun attachCreateSubjectFragment(){
-
+        val transaction = activity.supportFragmentManager.beginTransaction()
+        if (currentFragment != null) {
+            transaction.detach(currentFragment)
+        }
+        if (settingsFragment.isDetached) {
+            transaction.attach(createSubjectFragment)
+        } else {
+            transaction.add(R.id.main_content, createSubjectFragment)
+        }
+        transaction.commit()
+        currentFragment = settingsFragment
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

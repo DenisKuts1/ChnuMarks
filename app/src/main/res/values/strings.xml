@@ -22,4 +22,17 @@
     <string name="thursday_schedule_fragment">Thursday</string>
     <string name="friday_schedule_fragment">Friday</string>
     <string name="edit_schedule_list_item_add_new">Add new</string>
+    <string name="create_subject_general_text">General</string>
+    <string name="create_subject_tasks_text">Tasks</string>
+    <string name="create_subject_group_hint">Group</string>
+    <string name="create_subject_subject_name_text">Subject Name</string>
+    <string name="create_lab_description">Task Description</string>
+    <string name="create_lab_max_points">Max Points</string>
+    <string name="lab_max_points">%1$d point(s)</string>
+
+    <string-array name="lab_types">
+        <item>Task Type</item>
+        <item>Lab</item>
+        <item>Test</item>
+    </string-array>
 </resources>
