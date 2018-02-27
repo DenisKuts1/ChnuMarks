@@ -14,9 +14,13 @@ import com.chnumarks.fragments.menu.edit.EditSubjectFragment
 /**
  * Created by denak on 14.02.2018.
  */
-class EditFragmentPagerAdapter(val context: Context, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+class EditFragmentPagerAdapter(val context: Context, fragmentManager: FragmentManager, manager: com.chnumarks.fragments.FragmentManager) : FragmentPagerAdapter(fragmentManager) {
     val editScheduleFragment = EditScheduleFragment()
     val editSubjectFragment = EditSubjectFragment()
+
+    init {
+        editSubjectFragment.fragmentManager = manager
+    }
 
     override fun getItem(position: Int) = when (position) {
         0 -> editScheduleFragment

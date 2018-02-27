@@ -36,6 +36,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     init {
         editToolbarFragment.drawerLayout = activity.drawerLayout
         mainToolbarFragment.drawerLayout = activity.drawerLayout
+        editFragment.manager = this
         if (auth.currentUser == null) {
             attachWelcomeFragment()
         } else {
@@ -50,8 +51,6 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         attachNavigationFragment()
         attachScheduleFragment()
     }
-
-    fun getToolbar() = mainToolbarFragment.toolbar
 
     fun setUpUserInfo(user: FirebaseUser) {
         navigationFragment.setUser(user)
@@ -169,6 +168,10 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         }
         transaction.commit()
         currentFragment = settingsFragment
+    }
+
+    fun attachCreateSubjectFragment(){
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

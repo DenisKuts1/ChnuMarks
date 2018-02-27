@@ -32,8 +32,9 @@ class EditToolbarFragment : Fragment() {
         fragment.setUpTabLayout(tabLayout)
         setLightStatusBar(toolbar, activity)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()
-            toolbar.setPadding(0, offset, 0, 0)
+            val paddingTop = (25 * resources.displayMetrics.density + 0.5f).toInt()
+            val paddingStartEnd = (16 * resources.displayMetrics.density + 0.5f).toInt()
+            toolbar.setPadding(paddingStartEnd, paddingTop, paddingStartEnd, 0)
         }
         drawerLayout.addDrawerListener(NavigationDrawerListener(toolbar,activity as MainActivity))
 

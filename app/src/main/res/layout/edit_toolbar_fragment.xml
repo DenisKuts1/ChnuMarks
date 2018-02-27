@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/edit_toolbar"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
-    android:elevation="0dp"
+    android:elevation="2dp"
     android:paddingTop="25dp"
     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -14,13 +14,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:src="@mipmap/ic_menu_black_36dp" />
+        android:src="@drawable/ic_menu_black_24dp" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/edit_tab_layout"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|fill_vertical"
+        app:tabIndicatorColor="#6F6F6F"
         >
     </android.support.design.widget.TabLayout>
 
@@ -28,5 +29,5 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:src="@mipmap/ic_more_vert_black_36dp" />
+        android:src="@drawable/ic_help_black_24dp" />
 </android.support.v7.widget.Toolbar>
