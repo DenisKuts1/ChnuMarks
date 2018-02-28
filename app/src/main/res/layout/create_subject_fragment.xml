@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:paddingStart="16dp"
                 android:hint="@string/create_subject_subject_name_text" />
         </LinearLayout>
 
@@ -64,6 +65,7 @@
                 style="@style/Widget.AppCompat.Spinner.Underlined"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingStart="16dp"
                 android:prompt="@string/create_subject_group_hint" />
         </LinearLayout>
 
@@ -73,6 +75,7 @@
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:paddingTop="32dp"
+            android:textSize="20sp"
             android:text="@string/create_subject_tasks_text" />
     </LinearLayout>
 </ScrollView>

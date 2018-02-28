@@ -31,6 +31,7 @@
             android:id="@+id/create_lab_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
             android:hint="@string/create_lab_description" />
 
         <EditText
@@ -38,7 +39,15 @@
             android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="16dp"
             android:hint="@string/create_lab_max_points" />
+        <Button
+            android:id="@+id/create_lab_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/submit"
+            android:paddingTop="16dp"
+            android:layout_gravity="end"/>
 
     </LinearLayout>
 

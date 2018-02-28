@@ -6,6 +6,7 @@ import android.view.MenuItem
 import com.chnumarks.MainActivity
 import com.chnumarks.R
 import com.chnumarks.fragments.menu.*
+import com.chnumarks.fragments.toolbars.CreateSubjectToolbar
 import com.chnumarks.fragments.toolbars.EditToolbarFragment
 import com.chnumarks.fragments.toolbars.MainToolbarFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     val navigationFragment = NavigationDrawerFragment()
     val mainToolbarFragment = MainToolbarFragment()
     val editToolbarFragment = EditToolbarFragment()
+    val createSubjectToolbar = CreateSubjectToolbar()
 
     val auth = FirebaseAuth.getInstance()
 
@@ -37,6 +39,8 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     init {
         editToolbarFragment.drawerLayout = activity.drawerLayout
         mainToolbarFragment.drawerLayout = activity.drawerLayout
+        createSubjectToolbar.drawerLayout = activity.drawerLayout
+        createSubjectToolbar.createSubjectFragment = createSubjectFragment
         editFragment.manager = this
         if (auth.currentUser == null) {
             attachWelcomeFragment()
@@ -83,6 +87,20 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         }
         transaction.commit()
         currentToolbarFragment = editToolbarFragment
+    }
+
+    fun attachCreateSubjecrToolbarFragment() {
+        val transaction = activity.supportFragmentManager.beginTransaction()
+        if (currentToolbarFragment != null) {
+            transaction.detach(currentToolbarFragment)
+        }
+        if (createSubjectToolbar.isDetached) {
+            transaction.attach(createSubjectToolbar)
+        } else {
+            transaction.add(R.id.main_content, createSubjectToolbar)
+        }
+        transaction.commit()
+        currentToolbarFragment = createSubjectToolbar
     }
 
     fun attachWelcomeFragment() {
@@ -172,6 +190,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     }
 
     fun attachCreateSubjectFragment(){
+        attachCreateSubjecrToolbarFragment()
         val transaction = activity.supportFragmentManager.beginTransaction()
         if (currentFragment != null) {
             transaction.detach(currentFragment)

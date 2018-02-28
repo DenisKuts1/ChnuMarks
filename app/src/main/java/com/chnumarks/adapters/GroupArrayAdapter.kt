@@ -22,18 +22,29 @@ class GroupArrayAdapter(val context: Context, val list: ArrayList<Group>) : Base
 
     }
 
+    val dialog = SelectGroupDialogFragment()
+
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        if(p2 == 0) return
-        val dialog = SelectGroupDialogFragment()
+        if (p2 == 0) return
         val names = ArrayList<CharSequence>()
         list[p2 - 1].students.forEach { names += it.name }
         dialog.list = names
-        dialog.title = getItem(p2)
+        dialog.title = if (isEnabled(p2)) {
+            getItem(p2 - 1)!!.name
+        } else {
+            context.resources.getString(R.string.create_subject_group_hint)
+        }
         dialog.show((context as MainActivity).supportFragmentManager, "")
+
     }
 
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-        val text = getItem(p0)
+
+        val text = if (isEnabled(p0)) {
+            getItem(p0 - 1)!!.name
+        } else {
+            context.resources.getString(R.string.create_subject_group_hint)
+        }
         val view = if (p1 == null) {
             val id = if (isEnabled(p0)) {
                 R.layout.create_group_spinner_item_enabled
@@ -50,14 +61,11 @@ class GroupArrayAdapter(val context: Context, val list: ArrayList<Group>) : Base
         return view
     }
 
-    override fun getItem(p0: Int) = if (isEnabled(p0)) {
-        list[p0 - 1].name
-    } else context.resources.getString(R.string.create_subject_group_hint)
+    override fun getItem(p0: Int) = list[p0]
 
     override fun getItemId(p0: Int) = p0.toLong()
 
     override fun getCount() = list.size + 1
-
 
     override fun isEnabled(position: Int) = position != 0
 }

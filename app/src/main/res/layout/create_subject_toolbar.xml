@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_toolbar"
+    android:id="@+id/create_subject_toolbar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary"
@@ -11,14 +11,23 @@
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     >
     <ImageView
+        android:id="@+id/create_subject_close"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:src="@mipmap/ic_menu_black_36dp" />
+        android:src="@drawable/ic_close_black_36dp" />
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_subject"
+        android:textSize="24sp"
+        android:gravity="start"/>
 
     <ImageView
+        android:id="@+id/create_subject_check"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:src="@mipmap/ic_more_vert_black_36dp" />
+        android:src="@drawable/ic_check_black_36dp" />
 </android.support.v7.widget.Toolbar>

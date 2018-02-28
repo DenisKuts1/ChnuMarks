@@ -29,6 +29,8 @@
     <string name="create_lab_description">Task Description</string>
     <string name="create_lab_max_points">Max Points</string>
     <string name="lab_max_points">%1$d point(s)</string>
+    <string name="submit">submit</string>
+    <string name="create_subject">Create subject</string>
 
     <string-array name="lab_types">
         <item>Task Type</item>
