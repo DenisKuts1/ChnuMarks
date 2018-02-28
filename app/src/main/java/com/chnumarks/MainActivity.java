@@ -188,4 +188,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if(manager.onBackPressed()) super.onBackPressed();
+    }
 }

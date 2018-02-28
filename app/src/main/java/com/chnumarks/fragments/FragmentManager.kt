@@ -9,8 +9,15 @@ import com.chnumarks.fragments.menu.*
 import com.chnumarks.fragments.toolbars.CreateSubjectToolbar
 import com.chnumarks.fragments.toolbars.EditToolbarFragment
 import com.chnumarks.fragments.toolbars.MainToolbarFragment
+import com.chnumarks.models.Group
+import com.chnumarks.models.Student
+import com.chnumarks.models.Subject
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 /**
  * Created by denak on 20.02.2018.
@@ -35,13 +42,53 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     var currentNavigationView: Fragment? = null
     var currentToolbarFragment: Fragment? = null
 
+    val groups = HashMap<String,Group>()
+    val schedule = HashMap<Int, ArrayList<Subject>>()
 
     init {
         editToolbarFragment.drawerLayout = activity.drawerLayout
         mainToolbarFragment.drawerLayout = activity.drawerLayout
+
         createSubjectToolbar.drawerLayout = activity.drawerLayout
         createSubjectToolbar.createSubjectFragment = createSubjectFragment
+
+        createSubjectToolbar.manager = this
         editFragment.manager = this
+        createSubjectFragment.manager = this
+
+        FirebaseFirestore.getInstance().collection("groups").get().addOnSuccessListener {
+            it.forEach {
+                val group = Group(it.id, it["name"] as String)
+                it.reference.collection("students").orderBy("name").get().addOnSuccessListener {
+                    it.forEach {
+                        val student = Student(it["name"] as String)
+                        group.students[it.id] = student
+                    }
+                }
+                groups[it.id] = group
+            }
+            val userId = FirebaseAuth.getInstance().uid!!
+
+            FirebaseFirestore.getInstance().collection("schedule").orderBy("name").get().addOnSuccessListener {
+                it.forEach {
+                    val subjects = ArrayList<Subject>()
+                    val day = (it["name"] as String).toInt()
+                    val week = (it["week"] as Long).toInt() - 1
+                    if(it["subjects"] != null) {
+                        (it["subjects"] as List<String>).forEach {
+                            FirebaseFirestore.getInstance().collection("subjects").document(it).get().addOnSuccessListener {
+                                if (it["user"] == userId) {
+                                    val group = groups[it["group"] as String]
+                                    subjects += Subject(it.id, it["name"] as String, group!!)
+                                }
+                            }
+                        }
+                    }
+                    schedule[day + week * 5] = subjects
+                }
+            }
+        }
+
         if (auth.currentUser == null) {
             attachWelcomeFragment()
         } else {
@@ -49,12 +96,24 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         }
     }
 
+    fun onBackPressed(): Boolean{
+        if(currentFragment == createSubjectFragment){
+            attachEditToolbarFragment()
+            attachEditFragment()
+            return false
+        }
+        return true
+    }
+
+
+
     fun initialSetUp(user: FirebaseUser) {
         attachMainToolbarFragment()
         navigationFragment.setUser(user)
         navigationFragment.setNavigationListener(this)
         attachNavigationFragment()
         attachScheduleFragment()
+
     }
 
     fun setUpUserInfo(user: FirebaseUser) {
@@ -195,13 +254,13 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         if (currentFragment != null) {
             transaction.detach(currentFragment)
         }
-        if (settingsFragment.isDetached) {
+        if (createSubjectFragment.isDetached) {
             transaction.attach(createSubjectFragment)
         } else {
             transaction.add(R.id.main_content, createSubjectFragment)
         }
         transaction.commit()
-        currentFragment = settingsFragment
+        currentFragment = createSubjectFragment
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

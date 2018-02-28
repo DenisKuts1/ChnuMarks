@@ -12,9 +12,11 @@ import android.widget.ImageView
 import com.chnumarks.MainActivity
 import com.chnumarks.R
 import com.chnumarks.fragments.CreateSubjectFragment
+import com.chnumarks.fragments.FragmentManager
 import com.chnumarks.listeners.NavigationDrawerListener
 import com.chnumarks.models.Group
 import com.chnumarks.setLightStatusBar
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,6 +29,7 @@ class CreateSubjectToolbar : Fragment() {
     lateinit var toolbar: Toolbar
     lateinit var createSubjectFragment: CreateSubjectFragment
     lateinit var drawerLayout: DrawerLayout
+    lateinit var manager: FragmentManager
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater!!.inflate(R.layout.create_subject_toolbar, container, false)
@@ -49,10 +52,12 @@ class CreateSubjectToolbar : Fragment() {
         val check = view.findViewById<ImageView>(R.id.create_subject_check)
         check.isClickable = true
         check.setOnClickListener {
+            val userId = if(FirebaseAuth.getInstance().uid == null) "" else FirebaseAuth.getInstance().uid!!
             val subject = HashMap<String, Any>()
             subject["name"] = createSubjectFragment.name.text.toString()
             subject["group"] = (createSubjectFragment.spinner.selectedItem as Group).id
             subject["students"] = createSubjectFragment.adapter.dialog.checked.toList()
+            subject["user"] = userId
             val db = FirebaseFirestore.getInstance()
             db.collection("subjects").add(subject).addOnSuccessListener {
                 val labs = ArrayList<Map<String, Any>>()
@@ -64,8 +69,10 @@ class CreateSubjectToolbar : Fragment() {
                     labs += map
                 }
                 labs.forEach { lab -> it.collection("labs").add(lab) }
+                manager.attachEditToolbarFragment()
+                manager.attachEditFragment()
             }
-            println(1231231313123)
+
 
         }
 

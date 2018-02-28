@@ -32,6 +32,8 @@
     <string name="submit">submit</string>
     <string name="create_subject">Create subject</string>
 
+    <string name="edit_subject_list_item">%1$s (%2$s)</string>
+
     <string-array name="lab_types">
         <item>Task Type</item>
         <item>Lab</item>

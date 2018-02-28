@@ -19,7 +19,7 @@ class EditFragmentPagerAdapter(val context: Context, fragmentManager: FragmentMa
     val editSubjectFragment = EditSubjectFragment()
 
     init {
-        editSubjectFragment.fragmentManager = manager
+        editSubjectFragment.manager = manager
     }
 
     override fun getItem(position: Int) = when (position) {

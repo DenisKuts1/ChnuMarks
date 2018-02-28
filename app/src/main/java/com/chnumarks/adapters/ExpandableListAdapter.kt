@@ -11,16 +11,7 @@ import com.chnumarks.R
 /**
  * Created by denak on 13.02.2018.
  */
-class ExpandableListAdapter : BaseExpandableListAdapter {
-    private val context: Context
-    private val headers: List<String>
-    private val data: Map<String, List<String>>
-
-    constructor(context: Context, headers: List<String>, data: Map<String, List<String>>) {
-        this.context = context
-        this.headers = headers
-        this.data = data
-    }
+class ExpandableListAdapter(private val context: Context, private val headers: List<String>, private val data: Map<String, List<String>>) : BaseExpandableListAdapter() {
 
     override fun getGroup(p0: Int) = headers[p0]
 

@@ -27,7 +27,7 @@ class GroupArrayAdapter(val context: Context, val list: ArrayList<Group>) : Base
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         if (p2 == 0) return
         val names = ArrayList<CharSequence>()
-        list[p2 - 1].students.forEach { names += it.name }
+        list[p2 - 1].students.values.sortedBy { it.name }.forEach { names += it.name }
         dialog.list = names
         dialog.title = if (isEnabled(p2)) {
             getItem(p2 - 1)!!.name
