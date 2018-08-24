@@ -29,8 +29,8 @@ class CreateLabFragment : Fragment() {
 
     var isLast = false
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.create_subject_lab, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.create_subject_lab, container, false)
         spinner = view.findViewById(R.id.create_lab_spinner)
         description = view.findViewById(R.id.create_lab_description)
         maxPointsEdit = view.findViewById(R.id.create_lab_max_points)
@@ -40,7 +40,7 @@ class CreateLabFragment : Fragment() {
             description.setText(lab.name, TextView.BufferType.EDITABLE)
             maxPointsEdit.setText(lab.maxMarks.toString(), TextView.BufferType.EDITABLE)
         }
-        spinner.adapter = LabSpinnerAdapter(context, R.array.lab_types)
+        spinner.adapter = LabSpinnerAdapter(context!!, R.array.lab_types)
 
         submit.setOnClickListener {
             if (description.text.isNotEmpty() && maxPointsEdit.text.isNotEmpty() && spinner.selectedItemId != 0L) {

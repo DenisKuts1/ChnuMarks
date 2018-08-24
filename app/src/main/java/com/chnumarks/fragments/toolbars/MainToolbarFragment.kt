@@ -21,12 +21,12 @@ class MainToolbarFragment : Fragment() {
     lateinit var toolbar: Toolbar
     lateinit var drawerLayout: DrawerLayout
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.main_toolbar_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.main_toolbar_fragment, container, false)
 
         // Setting up toolbar
         toolbar = view.findViewById(R.id.main_toolbar)
-        setLightStatusBar(toolbar, activity)
+        setLightStatusBar(toolbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()
             toolbar.setPadding(0, offset, 0, 0)

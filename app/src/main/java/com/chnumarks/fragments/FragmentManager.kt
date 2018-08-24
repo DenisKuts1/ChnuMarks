@@ -24,17 +24,23 @@ import kotlin.collections.HashMap
  */
 class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationItemSelectedListener {
 
-    val editFragment = EditFragment()
-    val scheduleFragment = ScheduleFragment()
-    val reportFragment = ReportFragment()
-    val settingsFragment = SettingsFragment()
-    val welcomeFragment = WelcomeFragment()
-    val createSubjectFragment = CreateSubjectFragment()
+    val editFragment by lazy { EditFragment().also { it.manager = this } }
+    val scheduleFragment by lazy { ScheduleFragment() }
+    val reportFragment by lazy { ReportFragment() }
+    val settingsFragment by lazy { SettingsFragment() }
+    val welcomeFragment by lazy { WelcomeFragment() }
+    val createSubjectFragment by lazy { CreateSubjectFragment().also { it.manager = this } }
 
-    val navigationFragment = NavigationDrawerFragment()
-    val mainToolbarFragment = MainToolbarFragment()
-    val editToolbarFragment = EditToolbarFragment()
-    val createSubjectToolbar = CreateSubjectToolbar()
+    val navigationFragment by lazy { NavigationDrawerFragment() }
+    val mainToolbarFragment by lazy { MainToolbarFragment().also { it.drawerLayout = activity.drawerLayout } }
+    val editToolbarFragment by lazy { EditToolbarFragment().also { it.drawerLayout = activity.drawerLayout } }
+    val createSubjectToolbar by lazy {
+        CreateSubjectToolbar().also {
+            it.drawerLayout = activity.drawerLayout
+            it.createSubjectFragment = createSubjectFragment
+            it.manager = this
+        }
+    }
 
     val auth = FirebaseAuth.getInstance()
 
@@ -42,20 +48,10 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     var currentNavigationView: Fragment? = null
     var currentToolbarFragment: Fragment? = null
 
-    val groups = HashMap<String,Group>()
+    val groups = HashMap<String, Group>()
     val schedule = HashMap<Int, ArrayList<Subject>>()
 
     init {
-        editToolbarFragment.drawerLayout = activity.drawerLayout
-        mainToolbarFragment.drawerLayout = activity.drawerLayout
-
-        createSubjectToolbar.drawerLayout = activity.drawerLayout
-        createSubjectToolbar.createSubjectFragment = createSubjectFragment
-
-        createSubjectToolbar.manager = this
-        editFragment.manager = this
-        createSubjectFragment.manager = this
-
         FirebaseFirestore.getInstance().collection("groups").get().addOnSuccessListener {
             it.forEach {
                 val group = Group(it.id, it["name"] as String)
@@ -74,7 +70,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
                     val subjects = ArrayList<Subject>()
                     val day = (it["name"] as String).toInt()
                     val week = (it["week"] as Long).toInt() - 1
-                    if(it["subjects"] != null) {
+                    if (it["subjects"] != null) {
                         (it["subjects"] as List<String>).forEach {
                             FirebaseFirestore.getInstance().collection("subjects").document(it).get().addOnSuccessListener {
                                 if (it["user"] == userId) {
@@ -90,29 +86,28 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         }
 
         if (auth.currentUser == null) {
-            attachWelcomeFragment()
+            attachFragment(Fragments.WELCOME)
         } else {
             initialSetUp(auth.currentUser!!)
         }
     }
 
-    fun onBackPressed(): Boolean{
-        if(currentFragment == createSubjectFragment){
+    fun onBackPressed(): Boolean {
+        if (currentFragment == createSubjectFragment) {
             attachEditToolbarFragment()
-            attachEditFragment()
+            attachFragment(Fragments.EDIT)
             return false
         }
         return true
     }
 
 
-
     fun initialSetUp(user: FirebaseUser) {
         attachMainToolbarFragment()
         navigationFragment.setUser(user)
         navigationFragment.setNavigationListener(this)
-        attachNavigationFragment()
-        attachScheduleFragment()
+        attachFragment(Fragments.NAVIGATION)
+        attachFragment(Fragments.SCHEDULE)
 
     }
 
@@ -123,7 +118,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     fun attachMainToolbarFragment() {
         val transaction = activity.supportFragmentManager.beginTransaction()
         if (currentToolbarFragment != null) {
-            transaction.detach(currentToolbarFragment)
+            transaction.detach(currentToolbarFragment!!)
         }
         if (mainToolbarFragment.isDetached) {
             transaction.attach(mainToolbarFragment)
@@ -137,7 +132,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     fun attachEditToolbarFragment() {
         val transaction = activity.supportFragmentManager.beginTransaction()
         if (currentToolbarFragment != null) {
-            transaction.detach(currentToolbarFragment)
+            transaction.detach(currentToolbarFragment!!)
         }
         if (editToolbarFragment.isDetached) {
             transaction.attach(editToolbarFragment)
@@ -151,7 +146,7 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
     fun attachCreateSubjecrToolbarFragment() {
         val transaction = activity.supportFragmentManager.beginTransaction()
         if (currentToolbarFragment != null) {
-            transaction.detach(currentToolbarFragment)
+            transaction.detach(currentToolbarFragment!!)
         }
         if (createSubjectToolbar.isDetached) {
             transaction.attach(createSubjectToolbar)
@@ -162,7 +157,109 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         currentToolbarFragment = createSubjectToolbar
     }
 
-    fun attachWelcomeFragment() {
+    fun attachFragment(fragment: Fragments) {
+        val transaction = activity.supportFragmentManager.beginTransaction()
+
+        val newFragment: Fragment
+        when (fragment) {
+            Fragments.WELCOME -> {
+                newFragment = welcomeFragment
+                if (currentFragment != null) {
+                    transaction.detach(currentToolbarFragment!!)
+                            .detach(navigationFragment)
+                }
+            }
+            Fragments.EDIT -> {
+                newFragment = editFragment
+            }
+            Fragments.NAVIGATION -> {
+                newFragment = navigationFragment
+                if (currentNavigationView != null) {
+                    transaction.detach(currentNavigationView!!)
+                }
+                if (newFragment.isDetached) {
+                    transaction.attach(newFragment)
+                } else {
+                    transaction.add(R.id.main_drawer_layout, newFragment)
+                }
+                currentNavigationView = newFragment
+            }
+            Fragments.REPORT -> {
+                newFragment = reportFragment
+            }
+            Fragments.SCHEDULE -> {
+                newFragment = scheduleFragment
+            }
+            Fragments.SETTINGS -> {
+                newFragment = settingsFragment
+            }
+            Fragments.SUBJECT -> {
+                newFragment = createSubjectFragment
+                attachCreateSubjecrToolbarFragment()
+            }
+        }
+        if(fragment != Fragments.NAVIGATION) {
+            if (currentFragment != null) {
+                transaction.detach(currentFragment!!)
+            }
+            if (newFragment.isDetached) {
+                transaction.attach(newFragment)
+            } else {
+                transaction.add(R.id.main_content, newFragment)
+            }
+            currentFragment = newFragment
+        }
+        transaction.commit()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.navigation_menu_schedule -> {
+                if (currentFragment != scheduleFragment) {
+                    if (currentToolbarFragment != mainToolbarFragment) {
+                        attachMainToolbarFragment()
+                    }
+                    attachFragment(Fragments.SCHEDULE)
+                }
+            }
+            R.id.navigation_menu_edit -> {
+                if (currentFragment != editFragment) {
+                    editToolbarFragment.setEditFragment(editFragment)
+                    attachEditToolbarFragment()
+                    attachFragment(Fragments.EDIT)
+                }
+            }
+            R.id.navigation_menu_report -> {
+                if (currentFragment != reportFragment) {
+                    if (currentToolbarFragment != mainToolbarFragment) {
+                        attachMainToolbarFragment()
+                    }
+                    attachFragment(Fragments.REPORT)
+                }
+            }
+            R.id.navigation_menu_settings -> {
+                if (currentFragment != settingsFragment) {
+                    if (currentToolbarFragment != mainToolbarFragment) {
+                        attachMainToolbarFragment()
+                    }
+                    attachFragment(Fragments.SETTINGS)
+                }
+            }
+            R.id.navigation_menu_exit -> {
+                auth.signOut()
+                attachFragment(Fragments.WELCOME)
+            }
+        }
+        activity.drawerLayout.closeDrawers()
+        return true
+    }
+
+    enum class Fragments {
+        SUBJECT, SETTINGS, REPORT, EDIT, NAVIGATION, SCHEDULE, WELCOME
+    }
+}
+
+/*    fun attachWelcomeFragment() {
         val transaction = activity.supportFragmentManager.beginTransaction()
         if (currentFragment != null) {
             transaction.detach(currentFragment)
@@ -176,132 +273,89 @@ class FragmentManager(val activity: MainActivity) : NavigationView.OnNavigationI
         }
         transaction.commit()
         currentFragment = welcomeFragment
-    }
+    }*/
 
-    fun attachScheduleFragment() {
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentFragment != null) {
-            transaction.detach(currentFragment)
-        }
-        if (scheduleFragment.isDetached) {
-            transaction.attach(scheduleFragment)
-        } else {
-            transaction.add(R.id.main_content, scheduleFragment)
-        }
-        transaction.commit()
-        currentFragment = scheduleFragment
+/*fun attachScheduleFragment() {
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentFragment != null) {
+        transaction.detach(currentFragment)
     }
+    if (scheduleFragment.isDetached) {
+        transaction.attach(scheduleFragment)
+    } else {
+        transaction.add(R.id.main_content, scheduleFragment)
+    }
+    transaction.commit()
+    currentFragment = scheduleFragment
+}*/
 
-    fun attachNavigationFragment() {
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentNavigationView != null) {
-            transaction.detach(currentNavigationView)
-        }
-        if (navigationFragment.isDetached) {
-            transaction.attach(navigationFragment)
-        } else {
-            transaction.add(R.id.main_drawer_layout, navigationFragment)
-        }
-        transaction.commit()
-        currentNavigationView = navigationFragment
+/*fun attachNavigationFragment() {
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentNavigationView != null) {
+        transaction.detach(currentNavigationView)
     }
+    if (navigationFragment.isDetached) {
+        transaction.attach(navigationFragment)
+    } else {
+        transaction.add(R.id.main_drawer_layout, navigationFragment)
+    }
+    transaction.commit()
+    currentNavigationView = navigationFragment
+}*/
 
-    fun attachEditFragment() {
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentFragment != null) {
-            transaction.detach(currentFragment)
-        }
-        if (editFragment.isDetached) {
-            transaction.attach(editFragment)
-        } else {
-            transaction.add(R.id.main_content, editFragment)
-        }
-        transaction.commit()
-        currentFragment = editFragment
+/*fun attachEditFragment() {
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentFragment != null) {
+        transaction.detach(currentFragment)
     }
+    if (editFragment.isDetached) {
+        transaction.attach(editFragment)
+    } else {
+        transaction.add(R.id.main_content, editFragment)
+    }
+    transaction.commit()
+    currentFragment = editFragment
+}*/
 
-    fun attachReportFragment() {
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentFragment != null) {
-            transaction.detach(currentFragment)
-        }
-        if (reportFragment.isDetached) {
-            transaction.attach(reportFragment)
-        } else {
-            transaction.add(R.id.main_content, reportFragment)
-        }
-        transaction.commit()
-        currentFragment = reportFragment
+/*fun attachReportFragment() {
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentFragment != null) {
+        transaction.detach(currentFragment)
     }
+    if (reportFragment.isDetached) {
+        transaction.attach(reportFragment)
+    } else {
+        transaction.add(R.id.main_content, reportFragment)
+    }
+    transaction.commit()
+    currentFragment = reportFragment
+}*/
 
-    fun attachSettingsFragment() {
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentFragment != null) {
-            transaction.detach(currentFragment)
-        }
-        if (settingsFragment.isDetached) {
-            transaction.attach(settingsFragment)
-        } else {
-            transaction.add(R.id.main_content, settingsFragment)
-        }
-        transaction.commit()
-        currentFragment = settingsFragment
+/*fun attachSettingsFragment() {
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentFragment != null) {
+        transaction.detach(currentFragment)
     }
+    if (settingsFragment.isDetached) {
+        transaction.attach(settingsFragment)
+    } else {
+        transaction.add(R.id.main_content, settingsFragment)
+    }
+    transaction.commit()
+    currentFragment = settingsFragment
+}*/
 
-    fun attachCreateSubjectFragment(){
-        attachCreateSubjecrToolbarFragment()
-        val transaction = activity.supportFragmentManager.beginTransaction()
-        if (currentFragment != null) {
-            transaction.detach(currentFragment)
-        }
-        if (createSubjectFragment.isDetached) {
-            transaction.attach(createSubjectFragment)
-        } else {
-            transaction.add(R.id.main_content, createSubjectFragment)
-        }
-        transaction.commit()
-        currentFragment = createSubjectFragment
+/*fun attachCreateSubjectFragment() {
+    attachCreateSubjecrToolbarFragment()
+    val transaction = activity.supportFragmentManager.beginTransaction()
+    if (currentFragment != null) {
+        transaction.detach(currentFragment)
     }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.navigation_menu_schedule -> {
-                if (currentFragment != scheduleFragment) {
-                    if(currentToolbarFragment != mainToolbarFragment){
-                        attachMainToolbarFragment()
-                    }
-                    attachScheduleFragment()
-                }
-            }
-            R.id.navigation_menu_edit -> {
-                if (currentFragment != editFragment) {
-                    editToolbarFragment.setEditFragment(editFragment)
-                    attachEditToolbarFragment()
-                    attachEditFragment()
-                }
-            }
-            R.id.navigation_menu_report -> {
-                if (currentFragment != reportFragment) {
-                    if(currentToolbarFragment != mainToolbarFragment){
-                        attachMainToolbarFragment()
-                    }
-                    attachReportFragment()
-                }
-            }
-            R.id.navigation_menu_settings -> {
-                if (currentFragment != settingsFragment) {
-                    if(currentToolbarFragment != mainToolbarFragment){
-                        attachMainToolbarFragment()
-                    }
-                    attachSettingsFragment()
-                }
-            }
-            R.id.navigation_menu_exit -> {
-                auth.signOut()
-                attachWelcomeFragment()
-            }
-        }
-        activity.drawerLayout.closeDrawers()
-        return true
+    if (createSubjectFragment.isDetached) {
+        transaction.attach(createSubjectFragment)
+    } else {
+        transaction.add(R.id.main_content, createSubjectFragment)
     }
-}
+    transaction.commit()
+    currentFragment = createSubjectFragment
+}*/

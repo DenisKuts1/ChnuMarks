@@ -24,11 +24,11 @@ class EditSubjectFragment : Fragment() {
     lateinit var manager: FragmentManager
     val subjectsMap = HashMap<Subject, String>()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater!!.inflate(R.layout.edit_subject_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(R.layout.edit_subject_fragment, container, false)
         val addNew = view.findViewById<LinearLayout>(R.id.edit_subjects_add_new)
         addNew.setOnClickListener {
-            manager.attachCreateSubjectFragment()
+            manager.attachFragment(FragmentManager.Fragments.SUBJECT)
         }
         val list = view.findViewById<ListView>(R.id.edit_subject_list)
         val db = FirebaseFirestore.getInstance()
@@ -42,7 +42,7 @@ class EditSubjectFragment : Fragment() {
                 subjects += subject
                 subjectsMap[subject] = it.id
             }
-            val adapter = SubjectListAdapter(context, subjects)
+            val adapter = SubjectListAdapter(context!!, subjects)
             adapter.fragment = this
             list.adapter = adapter
         }

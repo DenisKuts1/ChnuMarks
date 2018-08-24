@@ -15,14 +15,14 @@ class SelectGroupDialogFragment : DialogFragment() {
     lateinit var checked: BooleanArray
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = AlertDialog.Builder(activity)
-        checked = kotlin.BooleanArray(list.size, { _ -> true })
+        checked = kotlin.BooleanArray(list.size) { _ -> true }
         builder.setTitle(title)
-                .setMultiChoiceItems(list.toTypedArray(), checked, {_, i, b -> checked[i] = b })
-                .setPositiveButton("Confirm", { _, _ ->
+                .setMultiChoiceItems(list.toTypedArray(), checked) { _, i, b -> checked[i] = b }
+                .setPositiveButton("Confirm") { _, _ ->
                     run {
 
                     }
-                })
+                }
         return builder.create()
     }
 }

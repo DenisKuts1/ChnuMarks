@@ -13,13 +13,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 /**
  * Created by denak on 10.02.2018.
  */
-fun setLightStatusBar(view: View, activity: Activity) {
+fun setLightStatusBar(view: View) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         view.systemUiVisibility = view.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 }
 
-fun clearLightStatusBar(view: View, activity: Activity) {
+fun clearLightStatusBar(view: View) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         view.systemUiVisibility = 0
     }
@@ -35,8 +35,8 @@ fun getSchedule(groups: HashMap<String, Group>): HashMap<Int, ArrayList<Subject>
             val subjects = ArrayList<Subject>()
             val day = (it["name"] as String).toInt()
             val week = it["week"] as Int - 1
-            (it["subjects"] as List<String>).forEach {
-                db.collection("subjects").document(it).get().addOnSuccessListener {
+            (it["subjects"] as List<String>).forEach { subject ->
+                db.collection("subjects").document(subject).get().addOnSuccessListener {
                     if (it["user"] == userId){
                         val group = groups[it["group"] as String]
                         subjects += Subject(it.id, it["name"] as String, group!!)

@@ -34,13 +34,13 @@ class EditScheduleFragment : Fragment() {
     private lateinit var firstWeekListView: ExpandableListView
     private lateinit var secondWeekListView: ExpandableListView
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.edit_schedule_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.edit_schedule_fragment, container, false)
         firstWeekListView = view.findViewById(R.id.first_week_list)
         secondWeekListView = view.findViewById(R.id.second_week_list)
         prepareDataForList()
-        val firstAdapter = ExpandableListAdapter(activity, days, firstListContent)
-        val secondAdapter = ExpandableListAdapter(activity, days, secondListContent)
+        val firstAdapter = ExpandableListAdapter(activity!!, days, firstListContent)
+        val secondAdapter = ExpandableListAdapter(activity!!, days, secondListContent)
         firstWeekListView.setAdapter(firstAdapter)
         secondWeekListView.setAdapter(secondAdapter)
         val listener = ExpandableListView.OnGroupClickListener { p0, p1, p2, p3 ->
@@ -63,6 +63,7 @@ class EditScheduleFragment : Fragment() {
     }
 
     fun setListViewHeight(listView: ExpandableListView, group: Int) {
+
         val listAdapter = listView.expandableListAdapter as ExpandableListAdapter
         var totalHeight = 0
         val desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.width,

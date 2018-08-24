@@ -26,8 +26,8 @@ class CreateSubjectFragment : Fragment() {
     val fragments = ArrayList<CreateLabFragment>()
     val labs = ArrayList<Lab>()
     lateinit var manager: FragmentManager
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.create_subject_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.create_subject_fragment, container, false)
         spinner = view.findViewById(R.id.create_subject_group_spinner)
         name = view.findViewById(R.id.create_subject_name_edit)
         getGroups()
@@ -40,7 +40,7 @@ class CreateSubjectFragment : Fragment() {
         db.collection("groups").orderBy("name").get().addOnSuccessListener {
             val groups = ArrayList<Group>(manager.groups.values)
             groups.sortBy { it.name }
-            adapter = GroupArrayAdapter(activity, groups)
+            adapter = GroupArrayAdapter(activity!!, groups)
             spinner.adapter = adapter
             spinner.setSelection(0)
             spinner.onItemSelectedListener = adapter
@@ -54,7 +54,7 @@ class CreateSubjectFragment : Fragment() {
         val createLabFragment = CreateLabFragment()
         createLabFragment.isLast = true
         createLabFragment.createSubjectFragment = this
-        fragmentManager.beginTransaction().add(R.id.create_lab_main_layout, createLabFragment).commit()
+        fragmentManager!!.beginTransaction().add(R.id.create_lab_main_layout, createLabFragment).commit()
         fragments += createLabFragment
 
 

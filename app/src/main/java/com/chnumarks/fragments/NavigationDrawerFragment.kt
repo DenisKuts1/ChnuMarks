@@ -29,8 +29,8 @@ class NavigationDrawerFragment : Fragment() {
     private lateinit var user: FirebaseUser
     private lateinit var listener: NavigationView.OnNavigationItemSelectedListener
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.navigation_drawer_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.navigation_drawer_fragment, container, false)
         navigationView = view.findViewById(R.id.navigation_view)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()

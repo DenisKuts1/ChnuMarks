@@ -24,13 +24,13 @@ class EditToolbarFragment : Fragment() {
     lateinit var fragment: EditFragment
     lateinit var drawerLayout: DrawerLayout
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.edit_toolbar_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.edit_toolbar_fragment, container, false)
 
         toolbar = view.findViewById(R.id.edit_toolbar)
         tabLayout = view.findViewById(R.id.edit_tab_layout)
         fragment.setUpTabLayout(tabLayout)
-        setLightStatusBar(toolbar, activity)
+        setLightStatusBar(toolbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val paddingTop = (25 * resources.displayMetrics.density + 0.5f).toInt()
             val paddingStartEnd = (16 * resources.displayMetrics.density + 0.5f).toInt()

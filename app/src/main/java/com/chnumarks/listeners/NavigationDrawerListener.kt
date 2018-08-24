@@ -10,21 +10,17 @@ import com.chnumarks.setLightStatusBar
 /**
  * Created by denak on 20.02.2018.
  */
-class NavigationDrawerListener(val toolbar: Toolbar, val activity: MainActivity): DrawerLayout.DrawerListener {
+class NavigationDrawerListener(val toolbar: Toolbar, val activity: MainActivity) : DrawerLayout.DrawerListener {
 
     override fun onDrawerStateChanged(newState: Int) {}
 
-    override fun onDrawerSlide(drawerView: View?, slideOffset: Float) {}
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
 
-    override fun onDrawerClosed(drawerView: View?) {
-        if (drawerView != null) {
-            setLightStatusBar(toolbar, activity)
-        }
+    override fun onDrawerClosed(drawerView: View) {
+        setLightStatusBar(toolbar)
     }
 
-    override fun onDrawerOpened(drawerView: View?) {
-        if (drawerView != null) {
-            clearLightStatusBar(toolbar, activity)
-        }
+    override fun onDrawerOpened(drawerView: View) {
+        clearLightStatusBar(toolbar)
     }
 }

@@ -20,10 +20,10 @@ class EditFragment : Fragment() {
     lateinit var tabLayout: TabLayout
     lateinit var viewPager: ViewPager
     lateinit var manager: FragmentManager
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater!!.inflate(R.layout.edit_fragment, container, false)
         viewPager = view.findViewById(R.id.edit_view_pager)
-        viewPager.adapter = EditFragmentPagerAdapter(this.activity, childFragmentManager, manager)
+        viewPager.adapter = EditFragmentPagerAdapter(activity!!, childFragmentManager, manager)
         tabLayout.setupWithViewPager(viewPager)
         return view
     }

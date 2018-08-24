@@ -31,12 +31,12 @@ class CreateSubjectToolbar : Fragment() {
     lateinit var drawerLayout: DrawerLayout
     lateinit var manager: FragmentManager
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.create_subject_toolbar, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.create_subject_toolbar, container, false)
 
         // Setting up toolbar
         toolbar = view.findViewById(R.id.create_subject_toolbar)
-        setLightStatusBar(toolbar, activity)
+        setLightStatusBar(toolbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val offset = (25 * resources.displayMetrics.density + 0.5f).toInt()
             toolbar.setPadding(0, offset, 0, 0)
@@ -70,7 +70,7 @@ class CreateSubjectToolbar : Fragment() {
                 }
                 labs.forEach { lab -> it.collection("labs").add(lab) }
                 manager.attachEditToolbarFragment()
-                manager.attachEditFragment()
+                manager.attachFragment(FragmentManager.Fragments.EDIT)
             }
 
 
